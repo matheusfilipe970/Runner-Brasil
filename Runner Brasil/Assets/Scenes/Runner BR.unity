@@ -141,7 +141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &324982670
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -342,7 +342,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!65 &896909335
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -551,8 +551,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3dc89e9bff7651428b3017a2f7099e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  forwardSpeed: 8
   jumpForce: 6
+  sideSwipeForce: 60
+  smoothness: 1
 --- !u!54 &952236748
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -732,7 +734,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 62276a13df8ba7d4db37ca804208b87c, type: 2}
+  - {fileID: 2100000, guid: 0c39e41e4e4b57943ad02f7813898b75, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -772,7 +774,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 43.9}
-  m_LocalScale: {x: 6.5296, y: 0.1, z: 100}
+  m_LocalScale: {x: 24.2125, y: 0.1, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
