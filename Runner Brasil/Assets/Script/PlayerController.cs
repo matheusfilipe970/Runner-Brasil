@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
 
     private Rigidbody playerRigidbody;
     private int currentLane = 1; // 0 = Esquerda, 1 = Centro, 2 = Direita
-    private bool isGrounded = false;
+    private bool isGrounded = true;
 
     private void Start()
     {
@@ -46,7 +46,7 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case TouchPhase.Ended:
-                    // Pula se o toque for arrastado para cima, não houver movimento lateral significativo e estiver no chão
+                    // Pula somente se o toque for arrastado para cima e estiver no chão
                     if (touch.deltaPosition.y > 0 && Mathf.Abs(touch.deltaPosition.x / Screen.width) <= 0.1f && isGrounded)
                     {
                         Jump();
@@ -54,6 +54,27 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
+
+        // Debug para verificar o estado do isGrounded
+        Debug.Log("isGrounded: " + isGrounded);
+    }
+
+    private void FixedUpdate()
+    {
+        // Verifica se o jogador está no chão
+        isGrounded = IsGrounded();
+    }
+
+    private bool IsGrounded()
+    {
+        // Ajuste o raio do Raycast conforme necessário
+        float raycastLength = 0.1f;
+
+        // Cria um raio que vai para baixo a partir da posição do jogador
+        Ray ray = new Ray(transform.position, Vector3.down);
+
+        // Executa um Raycast e retorna verdadeiro se atingir algo
+        return Physics.Raycast(ray, raycastLength);
     }
 
     private void MoveSideways(float swipeDeltaX)
@@ -74,33 +95,16 @@ public class PlayerController : MonoBehaviour
         // Calcula a posição alvo suavizada
         Vector3 targetPosition = new Vector3((currentLane - 1) * sideSwipeForce, transform.position.y, transform.position.z);
 
-        // Limita a posição alvo às faixas desejadas
-        targetPosition.x = Mathf.Clamp(targetPosition.x, -sideSwipeForce, sideSwipeForce);
-
-        // Aplica suavização apenas à coordenada x da posição alvo
-        targetPosition.x = Mathf.Lerp(transform.position.x, targetPosition.x, Time.deltaTime * smoothness);
-
-        // Mantém as coordenadas y e z da posição atual
-        targetPosition.y = transform.position.y;
-        targetPosition.z = transform.position.z;
-
         // Atualiza a posição do jogador
-        transform.position = targetPosition;
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * smoothness);
+
+        // Limita a posição do jogador às faixas desejadas
+        transform.position = new Vector3(Mathf.Clamp(transform.position.x, -sideSwipeForce, sideSwipeForce), transform.position.y, transform.position.z);
     }
 
     private void Jump()
     {
         // Adiciona uma força vertical para simular um pulo
         playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        isGrounded = false; // Define como false quando pula
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        // Verifica se o jogador está no chão
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-        }
     }
 }
